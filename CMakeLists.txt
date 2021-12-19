@@ -10,7 +10,7 @@ file(GLOB_RECURSE INCLUDES "lv_drivers/*.h" "lv_demos/*.h"  "lvgl/*.h"  "./*.h" 
 file(GLOB_RECURSE SOURCES  "lv_drivers/*.c" "lv_demos/*.c"  "lvgl/*.c" )
 
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin) 
-SET(CMAKE_CXX_FLAGS "-O3")
+SET(CMAKE_CXX_FLAGS "-g -O3")
 
 find_package(SDL2 REQUIRED SDL2)
 include_directories(${SDL2_INCLUDE_DIRS})

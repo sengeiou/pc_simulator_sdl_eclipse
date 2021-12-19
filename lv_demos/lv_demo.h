@@ -54,6 +54,7 @@ extern "C" {
 #include "src/lv_demo_stress/lv_demo_stress.h"
 #include "src/lv_demo_keypad_encoder/lv_demo_keypad_encoder.h"
 #include "src/lv_demo_music/lv_demo_music.h"
+#include "src/lv_demo_amt/lv_demo_amt.h"
 
 
 /*********************
