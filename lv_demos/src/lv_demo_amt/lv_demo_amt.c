@@ -15,7 +15,7 @@ void lvgl_title_view_test(void)
     lv_tileview_add_tile(tileview, 0, 0, 0);
 }
 lv_obj_t* btn1,* btn2;
-lv_obj_t* current_app_obj_user=NULL;
+lv_obj_t* current_app_obj_user[100]={};
 #define LV_DESKTOP  lv_disp_get_scr_act(NULL)
  
 /**********************
@@ -35,37 +35,36 @@ static void event_handler(lv_event_t * e)
         {
             menu +=1;
             LV_LOG_USER("nemausa");
-             if (current_app_obj_user == NULL) {
-                current_app_obj_user = lv_obj_create(LV_DESKTOP);
-                lv_obj_set_size(current_app_obj_user, 1024, 600);
-                parent_menu = current_app_obj_user;
+                current_app_obj_user[menu] = lv_obj_create(current_app_obj_user[menu-1]);
+                lv_obj_set_size(current_app_obj_user[menu], 1024, 600);
+                lv_obj_set_pos(current_app_obj_user[menu], -20, -20);
+                parent_menu = current_app_obj_user[menu];
  
                 lv_obj_t* lable = lv_label_create(parent_menu);
                 char title[80];
                 lv_snprintf(title, 80, "this is menu=%d", menu);
                 lv_label_set_text(lable, title);
-                lv_obj_align_to(lable, NULL, LV_ALIGN_CENTER, 0, -10);
+                lv_obj_align_to(lable, NULL, LV_ALIGN_CENTER, 0, 0);
                 for (int i=0; i<5; i++)
                 {
                     lv_obj_t *btn = lv_btn_create(parent_menu);
                     // static uint32_t data1 = 6+i;
                     uint32_t *data1 = lv_mem_alloc(sizeof(uint32_t));
-
+                    *data1 = 1+i;
                     lv_obj_t* label_btn = lv_label_create(btn);
                     char str[80];
                     lv_snprintf(str,80, "Button=%d", i+1);
                     lv_label_set_text(label_btn, str);
-                    lv_obj_add_event_cb(btn, event_handler, LV_EVENT_ALL, data[i]);
+                    lv_obj_add_event_cb(btn, event_handler, LV_EVENT_ALL, data1);
                     lv_obj_align_to(btn, lable, LV_ALIGN_OUT_BOTTOM_MID, 0, 20+30*i);
                 }
-            }
         }
         else
         {
             LV_LOG_USER("10");
+            lv_obj_del(current_app_obj_user[menu]);
             menu -= 1;
-            lv_obj_del(current_app_obj_user);
-            current_app_obj_user = NULL;
+            // current_app_obj_user[menu] = NULL;
         }
 
     }
@@ -74,9 +73,6 @@ static void event_handler(lv_event_t * e)
     }
 }
 
-enum {
-
-};
 
 void lv_demo_amt()
 {
@@ -106,7 +102,8 @@ void lv_demo_amt()
     label = lv_label_create(btn1);
     lv_label_set_text(label, "Button");
     lv_obj_center(label);
-    lv_event_send(btn1, LV_EVENT_CLICKED, NULL);
+    current_app_obj_user[0] = desktop;
+    // lv_event_send(btn1, LV_EVENT_CLICKED, NULL);
     // lvgl_title_view_test();
     // LV_IMG_DECLARE(img_amt_bg);
     // lv_obj_t * img1 = lv_img_create(lv_scr_act());
